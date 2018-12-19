@@ -1,13 +1,15 @@
 //Try to be as explicit as possible and add Types to everything you can!
 
-let bankAccount: { money: number; deposit: (value: number) => void } = {
+type BankAccount = { money: number; deposit: (value: number) => void };
+
+let bankAccount: BankAccount = {
   money: 2000,
-  deposit(value) {
+  deposit(value: number): void {
     this.money += value;
   }
 };
 
-let myself: { name: string; bankAccount: any; hobbies: string[] } = {
+let myself: { name: string; bankAccount: BankAccount; hobbies: string[] } = {
   name: "Max",
   bankAccount: bankAccount,
   hobbies: ["Sports", "Cooking"]
