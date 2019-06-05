@@ -4,23 +4,34 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>VueJS</title>
-    <link rel="stylesheet" href="" />
     <script src="vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="blah.css" />
   </head>
   <body>
     <div id="app">
-      <button @click="changeLink">Click to Change Link</button>
-      <a :href="link">Link</a>
+      <div
+        class="demo"
+        @click="attachRed = !attachRed"
+        :class="divClasses"
+      ></div>
+      <div class="demo" :class="{red: attachRed}"></div>
+      <div class="demo" :class="[color, {red: attachRed}]"></div>
+      <hr />
+      <input type="text" v-model="color" />
     </div>
     <script>
       new Vue({
         el: "#app",
         data: {
-          link: "https://google.com"
+          attachRed: false,
+          color: "green"
         },
-        methods: {
-          changeLink: function() {
-            this.link = "http://apple.com";
+        computed: {
+          divClasses: function() {
+            return {
+              red: this.attachRed,
+              blue: !this.attachRed
+            };
           }
         }
       });
