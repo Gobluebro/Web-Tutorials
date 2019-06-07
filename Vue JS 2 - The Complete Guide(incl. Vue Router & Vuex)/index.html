@@ -8,40 +8,76 @@
     <link rel="stylesheet" type="text/css" href="blah.css" />
   </head>
   <body>
-    <div id="app">
-      <ul>
-        <!-- (element in array, index) -->
-        <li v-for="(ingredient, i) in ingredients" :key="ingredient">
-          {{ ingredient }} ({{ i }})
-        </li>
-      </ul>
-      <button @click="ingredients.push('spices')">Add New</button>
-      <hr />
-      <ul>
-        <li v-for="person in persons">
-          <div v-for="(value, key, index) in person">
-            {{ key }}: {{ value }} ({{ index }})
-          </div>
-        </li>
-      </ul>
-      <span v-for="n in 10">{{ n }}</span>
-      <hr />
-      <template v-for="(ingredient, index) in ingredients">
-        <h1>{{ ingredient }}</h1>
-        <p>{{ index }}</p>
-      </template>
+    <div id="app1">
+      <h1 ref="heading">{{ title }}</h1>
+      <button v-on:click="show">Show Paragraph</button>
+      <p v-if="showParagraph">This is not always visible</p>
     </div>
+    <div id="app2">
+      <h1 ref="heading">{{ title }}</h1>
+      <button @click="onChange">Change something in Vue 1</button>
+      <hello></hello>
+    </div>
+    <div id="app3"></div>
     <script>
-      new Vue({
-        el: "#app",
+      Vue.component("hello", {
+        template: "<h1>Hello!</h1>"
+      });
+      var vm1 = new Vue({
         data: {
-          ingredients: ["meat", "fruit", "cookies"],
-          persons: [
-            { name: "Max", age: 27, color: "red" },
-            { name: "Anna", age: "unknown", color: "blue" }
-          ]
+          title: "The VueJS Instance",
+          showParagraph: false
+        },
+        methods: {
+          show: function() {
+            this.showParagraph = true;
+            this.updateTitle("The VueJS Instance (Updated)");
+          },
+          updateTitle: function(title) {
+            this.title = title;
+          }
+        },
+        computed: {
+          lowercaseTitle: function() {
+            return this.title.toLowerCase();
+          }
+        },
+        watch: {
+          title: function(value) {
+            alert("Title changed, new value: " + value);
+          }
         }
       });
+
+      // like using el but for times when you don't know which element you'll use
+      vm1.$mount("#app1");
+
+      // added after, doesn't work like regular properties in vue js
+      vm1.newProp = "New!";
+      console.log(vm1);
+
+      setTimeout(function() {
+        vm1.title = "Changed by timer!";
+        vm1.show();
+      }, 3000);
+
+      var vm2 = new Vue({
+        el: "#app2",
+        data: { title: "The Second Instance" },
+        methods: {
+          onChange: function() {
+            vm1.title = "Changed!";
+          }
+        }
+      });
+
+      var vm3 = new Vue({
+        template: "<h1>Hello!</h1>"
+      });
+
+      //not very common to use but possible. there are better ways of doing this
+      vm3.$mount();
+      document.getElementById("app3").appendChild(vm3.$el);
     </script>
   </body>
 </html>
