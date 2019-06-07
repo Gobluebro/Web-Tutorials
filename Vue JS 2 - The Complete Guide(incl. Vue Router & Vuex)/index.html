@@ -9,22 +9,37 @@
   </head>
   <body>
     <div id="app">
-      <!-- remove from dom -->
-      <p v-if="show">You can see me! <span>Hello!</span></p>
-      <p v-else>Now you see me!</p>
-      <template v-if="show">
-        <h1>Heading</h1>
-        <p>Inside a template</p>
+      <ul>
+        <!-- (element in array, index) -->
+        <li v-for="(ingredient, i) in ingredients" :key="ingredient">
+          {{ ingredient }} ({{ i }})
+        </li>
+      </ul>
+      <button @click="ingredients.push('spices')">Add New</button>
+      <hr />
+      <ul>
+        <li v-for="person in persons">
+          <div v-for="(value, key, index) in person">
+            {{ key }}: {{ value }} ({{ index }})
+          </div>
+        </li>
+      </ul>
+      <span v-for="n in 10">{{ n }}</span>
+      <hr />
+      <template v-for="(ingredient, index) in ingredients">
+        <h1>{{ ingredient }}</h1>
+        <p>{{ index }}</p>
       </template>
-      <!-- keep in dom and hide it -->
-      <p v-show="show">Do you also see me?</p>
-      <button @click="show = !show">Switch</button>
     </div>
     <script>
       new Vue({
         el: "#app",
         data: {
-          show: true
+          ingredients: ["meat", "fruit", "cookies"],
+          persons: [
+            { name: "Max", age: 27, color: "red" },
+            { name: "Anna", age: "unknown", color: "blue" }
+          ]
         }
       });
     </script>
