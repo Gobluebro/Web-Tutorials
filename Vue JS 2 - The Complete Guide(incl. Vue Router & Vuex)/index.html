@@ -8,76 +8,45 @@
     <link rel="stylesheet" type="text/css" href="blah.css" />
   </head>
   <body>
-    <div id="app1">
-      <h1 ref="heading">{{ title }}</h1>
-      <button v-on:click="show">Show Paragraph</button>
-      <p v-if="showParagraph">This is not always visible</p>
+    <div id="app">
+      <h1>{{ title }}</h1>
+      <button @click="title = 'Changed'">Update title</button>
+      <button @click="destroy">Destroy</button>
     </div>
-    <div id="app2">
-      <h1 ref="heading">{{ title }}</h1>
-      <button @click="onChange">Change something in Vue 1</button>
-      <hello></hello>
-    </div>
-    <div id="app3"></div>
+
     <script>
-      Vue.component("hello", {
-        template: "<h1>Hello!</h1>"
-      });
-      var vm1 = new Vue({
+      new Vue({
+        el: "#app",
         data: {
-          title: "The VueJS Instance",
-          showParagraph: false
+          title: "The VueJS Instance"
+        },
+        beforeCreate: function() {
+          console.log("beforeCreated()");
+        },
+        beforeMount: function() {
+          console.log("beforeMount()");
+        },
+        mounted: function() {
+          console.log("mounted()");
+        },
+        beforeUpdate: function() {
+          console.log("beforeUpdate()");
+        },
+        updated: function() {
+          console.log("updated()");
+        },
+        beforeDestroy: function() {
+          console.log("beforeDestroy()");
+        },
+        destroyed: function() {
+          console.log("destroyed()");
         },
         methods: {
-          show: function() {
-            this.showParagraph = true;
-            this.updateTitle("The VueJS Instance (Updated)");
-          },
-          updateTitle: function(title) {
-            this.title = title;
-          }
-        },
-        computed: {
-          lowercaseTitle: function() {
-            return this.title.toLowerCase();
-          }
-        },
-        watch: {
-          title: function(value) {
-            alert("Title changed, new value: " + value);
+          destroy: function() {
+            this.$destroy();
           }
         }
       });
-
-      // like using el but for times when you don't know which element you'll use
-      vm1.$mount("#app1");
-
-      // added after, doesn't work like regular properties in vue js
-      vm1.newProp = "New!";
-      console.log(vm1);
-
-      setTimeout(function() {
-        vm1.title = "Changed by timer!";
-        vm1.show();
-      }, 3000);
-
-      var vm2 = new Vue({
-        el: "#app2",
-        data: { title: "The Second Instance" },
-        methods: {
-          onChange: function() {
-            vm1.title = "Changed!";
-          }
-        }
-      });
-
-      var vm3 = new Vue({
-        template: "<h1>Hello!</h1>"
-      });
-
-      //not very common to use but possible. there are better ways of doing this
-      vm3.$mount();
-      document.getElementById("app3").appendChild(vm3.$el);
     </script>
   </body>
 </html>
