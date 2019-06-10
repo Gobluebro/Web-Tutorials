@@ -9,43 +9,37 @@
   </head>
   <body>
     <div id="app">
-      <h1>{{ title }}</h1>
-      <button @click="title = 'Changed'">Update title</button>
-      <button @click="destroy">Destroy</button>
+      <my-cmp></my-cmp>
+      <hr />
+      <my-cmp></my-cmp>
     </div>
-
+    <div id="app2">
+      <my-cmp></my-cmp>
+      <hr />
+      <my-cmp></my-cmp>
+    </div>
     <script>
-      new Vue({
-        el: "#app",
-        data: {
-          title: "The VueJS Instance"
+      // this changes both
+      //var data = { status: "Critical" };
+
+      Vue.component("my-cmp", {
+        data: function() {
+          //this changes only one at a time
+          return { status: "Critical" };
         },
-        beforeCreate: function() {
-          console.log("beforeCreated()");
-        },
-        beforeMount: function() {
-          console.log("beforeMount()");
-        },
-        mounted: function() {
-          console.log("mounted()");
-        },
-        beforeUpdate: function() {
-          console.log("beforeUpdate()");
-        },
-        updated: function() {
-          console.log("updated()");
-        },
-        beforeDestroy: function() {
-          console.log("beforeDestroy()");
-        },
-        destroyed: function() {
-          console.log("destroyed()");
-        },
+        template:
+          "<p>Server Status: {{status}} (<button @click='changeStatus'>Change</button>)</p>",
         methods: {
-          destroy: function() {
-            this.$destroy();
+          changeStatus: function() {
+            this.status = "Normal";
           }
         }
+      });
+      new Vue({
+        el: "#app"
+      });
+      new Vue({
+        el: "#app2"
       });
     </script>
   </body>
